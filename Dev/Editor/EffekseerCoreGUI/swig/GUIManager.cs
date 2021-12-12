@@ -247,16 +247,6 @@ public class GUIManager : global::System.IDisposable {
     EffekseerNativePINVOKE.GUIManager_PopStyleVar__SWIG_1(swigCPtr);
   }
 
-  public float GetStyleVar(ImGuiStyleVarFlags idx) {
-    float ret = EffekseerNativePINVOKE.GUIManager_GetStyleVar(swigCPtr, (int)idx);
-    return ret;
-  }
-
-  public Vec2 GetStyleVar2(ImGuiStyleVarFlags idx) {
-    Vec2 ret = new Vec2(EffekseerNativePINVOKE.GUIManager_GetStyleVar2(swigCPtr, (int)idx), true);
-    return ret;
-  }
-
   public void PushItemWidth(float item_width) {
     EffekseerNativePINVOKE.GUIManager_PushItemWidth(swigCPtr, item_width);
   }
@@ -341,49 +331,6 @@ public class GUIManager : global::System.IDisposable {
 
   public float GetDpiScale() {
     float ret = EffekseerNativePINVOKE.GUIManager_GetDpiScale(swigCPtr);
-    return ret;
-  }
-
-  public int GetItemID() {
-    int ret = EffekseerNativePINVOKE.GUIManager_GetItemID(swigCPtr);
-    return ret;
-  }
-
-  public void SetFocusID(int id) {
-    EffekseerNativePINVOKE.GUIManager_SetFocusID(swigCPtr, id);
-  }
-
-  public float GetScrollX() {
-    float ret = EffekseerNativePINVOKE.GUIManager_GetScrollX(swigCPtr);
-    return ret;
-  }
-
-  public float GetScrollY() {
-    float ret = EffekseerNativePINVOKE.GUIManager_GetScrollY(swigCPtr);
-    return ret;
-  }
-
-  public void SetScrollX(float scroll_x) {
-    EffekseerNativePINVOKE.GUIManager_SetScrollX(swigCPtr, scroll_x);
-  }
-
-  public void SetScrollY(float scroll_y) {
-    EffekseerNativePINVOKE.GUIManager_SetScrollY(swigCPtr, scroll_y);
-  }
-
-  public float GetScrollMaxX() {
-    float ret = EffekseerNativePINVOKE.GUIManager_GetScrollMaxX(swigCPtr);
-    return ret;
-  }
-
-  public float GetScrollMaxY() {
-    float ret = EffekseerNativePINVOKE.GUIManager_GetScrollMaxY(swigCPtr);
-    return ret;
-  }
-
-  public Vec2 ScrollToBringRectIntoView(Vec2 rect_min, Vec2 rect_max) {
-    Vec2 ret = new Vec2(EffekseerNativePINVOKE.GUIManager_ScrollToBringRectIntoView(swigCPtr, Vec2.getCPtr(rect_min), Vec2.getCPtr(rect_max)), true);
-    if (EffekseerNativePINVOKE.SWIGPendingException.Pending) throw EffekseerNativePINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
@@ -1092,16 +1039,6 @@ public class GUIManager : global::System.IDisposable {
     return ret;
   }
 
-  public bool SelectableContent(string idstr, string label, bool selected, ImageResource thumbnail, float size_x, float size_y, SelectableFlags flags) {
-    bool ret = EffekseerNativePINVOKE.GUIManager_SelectableContent__SWIG_0(swigCPtr, idstr, label, selected, ImageResource.getCPtr(thumbnail), size_x, size_y, (int)flags);
-    return ret;
-  }
-
-  public bool SelectableContent(string idstr, string label, bool selected, ImageResource thumbnail, float size_x, float size_y) {
-    bool ret = EffekseerNativePINVOKE.GUIManager_SelectableContent__SWIG_1(swigCPtr, idstr, label, selected, ImageResource.getCPtr(thumbnail), size_x, size_y);
-    return ret;
-  }
-
   public void SetTooltip(string text) {
     EffekseerNativePINVOKE.GUIManager_SetTooltip(swigCPtr, text);
   }
@@ -1305,16 +1242,6 @@ public class GUIManager : global::System.IDisposable {
 
   public bool IsAltKeyDown() {
     bool ret = EffekseerNativePINVOKE.GUIManager_IsAltKeyDown(swigCPtr);
-    return ret;
-  }
-
-  public int GetPressedKeyIndex(bool repeat) {
-    int ret = EffekseerNativePINVOKE.GUIManager_GetPressedKeyIndex(swigCPtr, repeat);
-    return ret;
-  }
-
-  public string GetInputCharacters() {
-    string ret = System.Runtime.InteropServices.Marshal.PtrToStringUni(EffekseerNativePINVOKE.GUIManager_GetInputCharacters(swigCPtr));
     return ret;
   }
 

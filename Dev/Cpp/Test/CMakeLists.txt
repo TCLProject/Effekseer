@@ -7,10 +7,10 @@ set(effekseer_test_src
     main.cpp
     TestHelper.h
     TestHelper.cpp
-    RenderingEnvironment/RenderingEnvironment.h
-    RenderingEnvironment/RenderingEnvironment.cpp
-    RenderingEnvironment/RenderingEnvironmentGL.h
-    RenderingEnvironment/RenderingEnvironmentGL.cpp
+    Window/RenderingWindow.h
+    Window/RenderingWindow.cpp
+    Window/RenderingWindowGL.h
+    Window/RenderingWindowGL.cpp
     Runtime/EffectPlatform.h
     Runtime/EffectPlatform.cpp
     Runtime/EffectPlatformGLFW.h
@@ -22,12 +22,8 @@ set(effekseer_test_src
     Runtime/TextureFormats.cpp
     Runtime/Vertex.cpp
     Runtime/ResourceManager.cpp
-    Backend/Helper.h
-    Backend/Helper.cpp
-    Backend/Textures.cpp
     Backend/Mesh.cpp
-    Backend/RenderPass.cpp
-    Backend/GPUParticle.cpp
+    Backend/RenderPassTest.cpp
 )
 
 if(BUILD_DX12 OR BUILD_METAL OR BUILD_VULKAN)
@@ -64,8 +60,8 @@ if(WIN32)
         Runtime/EffectPlatformDX9.cpp
         Runtime/EffectPlatformDX11.h
         Runtime/EffectPlatformDX11.cpp
-        RenderingEnvironment/RenderingEnvironmentDX11.h
-        RenderingEnvironment/RenderingEnvironmentDX11.cpp
+        Window/RenderingWindowDX11.h
+        Window/RenderingWindowDX11.cpp
     )
 endif()
 

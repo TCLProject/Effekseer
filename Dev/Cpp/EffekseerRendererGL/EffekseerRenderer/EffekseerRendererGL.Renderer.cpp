@@ -1335,7 +1335,6 @@ void AddDistortionPixelUniformLayout(Effekseer::CustomVector<Effekseer::Backend:
 	storeVector("CBPS0.softParticleParam");
 	storeVector("CBPS0.reconstructionParam1");
 	storeVector("CBPS0.reconstructionParam2");
-	storeVector("CBPS0.miscFlags");
 }
 
 Effekseer::CustomVector<Effekseer::CustomString<char>> GetTextureLocations(EffekseerRenderer::RendererShaderType type)

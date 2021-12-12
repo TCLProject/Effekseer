@@ -1,5 +1,5 @@
-I've made this fork to debug some variables for my project, you have no use for this.
-...
+﻿Effekseer
+=========
 This software is a particle effect editing tool. 
 By incorporating runtimes and plug-ins, effects created in Effekseer can be played back in your application. 
 Effekseer is intended to be used primarily for games, allowing the designer, not the programmer, to be in charge of editing particle effects.

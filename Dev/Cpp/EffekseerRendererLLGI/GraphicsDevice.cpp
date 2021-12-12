@@ -138,7 +138,7 @@ Texture::~Texture()
 	ES_SAFE_RELEASE(graphicsDevice_);
 }
 
-bool Texture::Init(const Effekseer::Backend::TextureParameter& param, const Effekseer::CustomVector<uint8_t>& initialData)
+bool Texture::Init(const Effekseer::Backend::TextureParameter& param)
 {
 	int mw = std::max(param.Size[0], param.Size[1]);
 	int count = 1;
@@ -151,7 +151,7 @@ bool Texture::Init(const Effekseer::Backend::TextureParameter& param, const Effe
 
 	LLGI::TextureInitializationParameter texParam;
 	texParam.Size = LLGI::Vec2I(param.Size[0], param.Size[1]);
-	texParam.MipMapCount = param.MipLevelCount < 1 ? count : param.MipLevelCount;
+	texParam.MipMapCount = param.GenerateMipmap ? count : 1;
 
 	// TODO : Fix it
 	texParam.MipMapCount = 1;
@@ -224,15 +224,18 @@ bool Texture::Init(const Effekseer::Backend::TextureParameter& param, const Effe
 	auto texture = graphicsDevice_->GetGraphics()->CreateTexture(texParam);
 	auto buf = texture->Lock();
 
-	if (initialData.size() > 0)
+	if (param.InitialData.size() > 0)
 	{
-		memcpy(buf, initialData.data(), initialData.size());
+		memcpy(buf, param.InitialData.data(), param.InitialData.size());
 	}
 
 	texture->Unlock();
 
 	texture_ = LLGI::CreateSharedPtr(texture);
-	param_ = param;
+
+	size_ = param.Size;
+	type_ = Effekseer::Backend::TextureType::Color2D;
+
 	return true;
 }
 
@@ -247,15 +250,8 @@ bool Texture::Init(uint64_t id, std::function<void()> onDisposed)
 	texture_ = LLGI::CreateSharedPtr(texture);
 	onDisposed_ = onDisposed;
 
-	param_.Format = Effekseer::Backend::TextureFormatType::R8G8B8A8_UNORM;
-	param_.Dimension = 2;
-	param_.Size = {
-		texture->GetSizeAs2D().X,
-		texture->GetSizeAs2D().Y,
-		0};
-	param_.MipLevelCount = texture_->GetMipmapCount();
-	param_.SampleCount = texture_->GetSamplingCount();
-	param_.Usage = Effekseer::Backend::TextureUsageType::External;
+	type_ = Effekseer::Backend::TextureType::Color2D;
+
 	return true;
 }
 
@@ -263,17 +259,9 @@ bool Texture::Init(LLGI::Texture* texture)
 {
 	LLGI::SafeAddRef(texture);
 	texture_ = LLGI::CreateSharedPtr(texture);
-
-	param_.Format = Effekseer::Backend::TextureFormatType::R8G8B8A8_UNORM;
-	param_.Dimension = 2;
-	param_.Size = {
-		texture->GetSizeAs2D().X,
-		texture->GetSizeAs2D().Y,
-		0};
-	param_.MipLevelCount = texture_->GetMipmapCount();
-	param_.SampleCount = texture_->GetSamplingCount();
-	param_.Usage = Effekseer::Backend::TextureUsageType::External;
-
+	type_ = Effekseer::Backend::TextureType::Color2D;
+	auto size = texture_->GetSizeAs2D();
+	size_ = {size.X, size.Y};
 	return true;
 }
 
@@ -368,11 +356,11 @@ Effekseer::Backend::IndexBufferRef GraphicsDevice::CreateIndexBuffer(int32_t ele
 	return ret;
 }
 
-Effekseer::Backend::TextureRef GraphicsDevice::CreateTexture(const Effekseer::Backend::TextureParameter& param, const Effekseer::CustomVector<uint8_t>& initialData)
+Effekseer::Backend::TextureRef GraphicsDevice::CreateTexture(const Effekseer::Backend::TextureParameter& param)
 {
 	auto ret = Effekseer::MakeRefPtr<Texture>(this);
 
-	if (!ret->Init(param, initialData))
+	if (!ret->Init(param))
 	{
 		return nullptr;
 	}

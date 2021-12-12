@@ -16,13 +16,11 @@ namespace Effekseer.Binary.RenderData
 		private TextureInformation _blendAlpha;
 		private TextureInformation _blendUvDistortion;
 		private readonly List<byte[]> _data = new List<byte[]>();
-		private System.Func<string, string> _convertLoadingFilePath;
 
 		public TextureValuesAggregator(
 			Data.RendererCommonValues value,
 			AdvancedRenderCommonValues advanceValue,
-			TextureInformationRepository repo,
-			System.Func<string, string> convertLoadingFilePath)
+			TextureInformationRepository repo)
 		{
 			_value = value;
 			_advanceValue = advanceValue;
@@ -32,7 +30,6 @@ namespace Effekseer.Binary.RenderData
 			_blend = repo.Blend;
 			_blendAlpha = repo.BlendAlpha;
 			_blendUvDistortion = repo.BlendUvDistortion;
-			_convertLoadingFilePath = convertLoadingFilePath;
 		}
 
 		public IEnumerable<byte[]> CurrentData => _data;
@@ -52,13 +49,7 @@ namespace Effekseer.Binary.RenderData
 		{
 			var tempTexInfo = new TextureInformation();
 
-			var absolutePath = image.AbsolutePath;
-			if(_convertLoadingFilePath != null)
-			{
-				absolutePath = _convertLoadingFilePath(absolutePath);
-			}
-
-			if (!texAndInd.ContainsKey(image.RelativePath) || !tempTexInfo.Load(absolutePath))
+			if (!texAndInd.ContainsKey(image.RelativePath) || !tempTexInfo.Load(image.AbsolutePath))
 			{
 				AddInt(-1);
 				return;
@@ -67,7 +58,7 @@ namespace Effekseer.Binary.RenderData
 			if (_value.UVTextureReferenceTarget.Value != Data.UVTextureReferenceTargetType.None
 				&& number == (int)_value.UVTextureReferenceTarget.Value)
 			{
-				_texInfo.Load(absolutePath);
+				_texInfo.Load(image.AbsolutePath);
 			}
 
 			AddInt(texAndInd[image.RelativePath]);

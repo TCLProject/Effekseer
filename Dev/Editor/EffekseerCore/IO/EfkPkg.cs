@@ -19,6 +19,16 @@ namespace Effekseer.IO
 	{
 		public const string MetaFileName = "metafile.json";
 
+		public enum FileType
+		{
+			Effect,
+			Texture,
+			Sound,
+			Model,
+			Material,
+			Curve,
+		}
+
 		public class FileInfo
 		{
 			public FileType Type;
@@ -33,7 +43,7 @@ namespace Effekseer.IO
 		public List<FileInfo> ResourceFiles = new List<FileInfo>();
 
 		public IEnumerable<FileInfo> AllFiles
-		{
+		{ 
 			get { return Enumerable.Concat(EffectFiles, ResourceFiles); }
 		}
 
@@ -67,28 +77,11 @@ namespace Effekseer.IO
 				var resourcePaths = Utils.Misc.FindResourcePaths(rootNode, Binary.ExporterVersion.Latest);
 				var dependencies = AddEffectDependencies(resourcePaths);
 
-				Func<string, string> convertLoadingFilePath = (string convertedPath) =>
-				{
-					foreach(var fileInfo in dependencies)
-					{
-						if(convertedPath.Contains(fileInfo.HashName))
-						{
-							return convertedPath.Replace(fileInfo.HashName, fileInfo.RelativePath);
-						}
-					}
-
-					return convertedPath;
-				};
-
 				var efkefc = new EfkEfc();
 				FileInfo file = new FileInfo();
 				file.Type = FileType.Effect;
 				file.RelativePath = Path.GetFileName(path);
-
-				var binaryExporter = new Binary.Exporter();
-				binaryExporter.ConvertLoadingFilePath = convertLoadingFilePath;
-
-				file.Data = efkefc.Save(binaryExporter, rootNode, Core.SaveAsXmlDocument(rootNode));
+				file.Data = efkefc.Save(rootNode, Core.SaveAsXmlDocument(rootNode));
 				file.HashName = ComputeHashName(file.Data);
 				file.LastWriteTime = lastWriteTime;
 				file.Dependencies = dependencies;
@@ -141,7 +134,7 @@ namespace Effekseer.IO
 
 				switch ((Utils.ResourcePaths.Type)i)
 				{
-					case Utils.ResourcePaths.Type.ColorTexture: type = FileType.Texture; break;
+					case Utils.ResourcePaths.Type.ColorTexture: type = FileType.Texture;  break;
 					case Utils.ResourcePaths.Type.NormalTexture: type = FileType.Texture; break;
 					case Utils.ResourcePaths.Type.DistortionTexture: type = FileType.Texture; break;
 					case Utils.ResourcePaths.Type.Model: type = FileType.Model; break;
@@ -207,10 +200,9 @@ namespace Effekseer.IO
 				{
 					HashSet<FileInfo> dependencies = new HashSet<FileInfo>();
 
-					bool result = ReplaceMaterialPaths(material, (path) =>
-					{
+					bool result = ReplaceMaterialPaths(material, (path) => {
 						FileInfo subfile = AddResource(
-							Utils.Misc.GetAbsolutePath(resource.AbsolutePath, path),
+							Utils.Misc.GetAbsolutePath(resource.AbsolutePath, path), 
 							path, FileType.Texture);
 
 						if (subfile != null)
@@ -445,9 +437,7 @@ namespace Effekseer.IO
 
 					// Write effect file
 					Core.OnFileLoaded = backedupDelegate;
-
-					var binaryExporter = new Binary.Exporter();
-					byte[] data = efkefc.Save(binaryExporter, root, Core.SaveAsXmlDocument(root));
+					byte[] data = efkefc.Save(root, Core.SaveAsXmlDocument(root));
 					File.WriteAllBytes(filePath, data);
 					File.SetLastWriteTime(filePath, file.LastWriteTime);
 				}

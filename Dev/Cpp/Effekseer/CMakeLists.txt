@@ -75,6 +75,7 @@ set(effekseer_src
     Effekseer/SIMD/Mat44f.cpp
     Effekseer/SIMD/Utils.cpp
     Effekseer/Noise/CurlNoise.cpp
+    Effekseer/Noise/PerlinNoise.cpp
     Effekseer/ForceField/ForceFields.cpp
     Effekseer/Model/ProceduralModelGenerator.cpp
     Effekseer/Model/Model.cpp
@@ -113,7 +114,9 @@ if(BUILD_WITH_EASY_PROFILER)
     add_dependencies(Effekseer ExternalProject_easy_profiler)
 endif()
 
-WarnError(${PROJECT_NAME})
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /we4456 /we4458)
+endif()
 
 if(BUILD_UNITYPLUGIN OR BUILD_UNITYPLUGIN_FOR_IOS)
     install(DIRECTORY "${PROJECT_SOURCE_DIR}"

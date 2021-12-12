@@ -270,8 +270,7 @@ namespace Effekseer.IO
 		{
 			Utils.Logger.Write(string.Format("Save : Start : {0}", path));
 
-			var binaryExporter = new Binary.Exporter();
-			var allData = Save(binaryExporter, rootNode, editorData);
+			var allData = Save(rootNode, editorData);
 
 			try
 			{
@@ -306,20 +305,12 @@ namespace Effekseer.IO
 			return true;
 		}
 
-		enum TextureColorType : int
+		public byte[] Save(Data.NodeRoot rootNode, XmlDocument editorData)
 		{
-			sRGB = 1 << 0,
-			Linear = 1 << 1,
-		}
+			// binary data
+			var binaryExporter = new Binary.Exporter();
+			var binaryDataLatest = binaryExporter.Export(rootNode, 1, Binary.ExporterVersion.Latest);  // TODO change magnification
 
-		class Dependency
-		{
-			public FileType FileType = FileType.Other;
-			public int Flag = 0;
-			public string Path = string.Empty;
-		}
-		byte[] GetInfoData(Binary.Exporter binaryExporter)
-		{
 			// info data
 			byte[] infoData = null;
 			{
@@ -336,97 +327,16 @@ namespace Effekseer.IO
 				int infoVersion = (int)Binary.ExporterVersion.Latest;
 				data.Add(BitConverter.GetBytes(infoVersion));
 
-				if ((int)infoVersion <= (int)Binary.ExporterVersion.Ver1600)
-				{
-					exportStrs(binaryExporter.UsedTextures);
-					exportStrs(binaryExporter.UsedNormalTextures);
-					exportStrs(binaryExporter.UsedDistortionTextures);
-					exportStrs(binaryExporter.Models);
-					exportStrs(binaryExporter.Sounds);
-					exportStrs(binaryExporter.Materials);
-					exportStrs(binaryExporter.Curves);
-				}
-				else
-				{
-					var srgbTextures = binaryExporter.UsedTextures;
-					var linearTextures = binaryExporter.UsedNormalTextures.Concat(binaryExporter.UsedDistortionTextures).ToList();
-					var textures = srgbTextures.Concat(linearTextures).Distinct().ToArray();
-
-					var dependencies = new List<Dependency>();
-
-					foreach (var texture in textures)
-					{
-						var d = new Dependency();
-						d.FileType = FileType.Texture;
-						d.Flag = 0;
-						if (srgbTextures.Contains(texture))
-						{
-							d.Flag += (int)TextureColorType.sRGB;
-						}
-
-						if (linearTextures.Contains(texture))
-						{
-							d.Flag += (int)TextureColorType.Linear;
-						}
-
-						d.Path = texture;
-						dependencies.Add(d);
-					}
-
-					foreach (var model in binaryExporter.Models)
-					{
-						var d = new Dependency();
-						d.FileType = FileType.Model;
-						d.Flag = 0;
-						d.Path = model;
-						dependencies.Add(d);
-					}
-
-					foreach (var sound in binaryExporter.Sounds)
-					{
-						var d = new Dependency();
-						d.FileType = FileType.Sound;
-						d.Flag = 0;
-						d.Path = sound;
-						dependencies.Add(d);
-					}
-
-					foreach (var material in binaryExporter.Materials)
-					{
-						var d = new Dependency();
-						d.FileType = FileType.Material;
-						d.Flag = 0;
-						d.Path = material;
-						dependencies.Add(d);
-					}
-
-					foreach (var curve in binaryExporter.Curves)
-					{
-						var d = new Dependency();
-						d.FileType = FileType.Curve;
-						d.Flag = 0;
-						d.Path = curve;
-						dependencies.Add(d);
-					}
-
-					data.Add(BitConverter.GetBytes(dependencies.Count));
-					foreach (var dependency in dependencies)
-					{
-						data.Add(BitConverter.GetBytes((int)dependency.FileType));
-						data.Add(BitConverter.GetBytes((int)dependency.Flag));
-						data.Add(GetBinaryStr(dependency.Path));
-					}
-				}
+				exportStrs(binaryExporter.UsedTextures);
+				exportStrs(binaryExporter.UsedNormalTextures);
+				exportStrs(binaryExporter.UsedDistortionTextures);
+				exportStrs(binaryExporter.Models);
+				exportStrs(binaryExporter.Sounds);
+				exportStrs(binaryExporter.Materials);
+				exportStrs(binaryExporter.Curves);
 
 				infoData = data.SelectMany(_ => _).ToArray();
 			}
-
-			return infoData;
-		}
-
-		public byte[] Save(Binary.Exporter binaryExporter, Data.NodeRoot rootNode, XmlDocument editorData)
-		{
-			var binaryDataLatest = binaryExporter.Export(rootNode, 1, Binary.ExporterVersion.Latest);  // TODO change magnification
 
 			// header
 			byte[] headerData = null;
@@ -439,12 +349,12 @@ namespace Effekseer.IO
 			}
 
 			var chunk = new Chunk();
-			chunk.AddChunk("INFO", GetInfoData(binaryExporter));
+			chunk.AddChunk("INFO", infoData);
 			chunk.AddChunk("EDIT", Compress(editorData));
 			chunk.AddChunk("BIN_", binaryDataLatest);
 
 			// fallback
-			if (Binary.ExporterVersion.Latest > Binary.ExporterVersion.Ver1500)
+			if(Binary.ExporterVersion.Latest > Binary.ExporterVersion.Ver1500)
 			{
 				var binaryExporterFallback = new Binary.Exporter();
 				var binaryDataFallback = binaryExporterFallback.Export(Core.Root, 1, Binary.ExporterVersion.Ver1500);

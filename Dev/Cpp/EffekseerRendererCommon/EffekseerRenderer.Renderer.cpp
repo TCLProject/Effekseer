@@ -198,12 +198,10 @@ void Renderer::SetBackground(::Effekseer::Backend::TextureRef texture)
 
 	Effekseer::Backend::TextureParameter param;
 	param.Format = Effekseer::Backend::TextureFormatType::R8G8B8A8_UNORM;
-	param.Dimension = 2;
-	param.Size = {1, 1, 1};
-	param.MipLevelCount = 1;
-	Effekseer::CustomVector<uint8_t> initialData;
-	initialData.assign(buf.begin(), buf.end());
-	return GetGraphicsDevice()->CreateTexture(param, initialData);
+	param.Size = {1, 1};
+	param.GenerateMipmap = false;
+	param.InitialData.assign(buf.begin(), buf.end());
+	return GetGraphicsDevice()->CreateTexture(param);
 }
 
 void Renderer::DeleteProxyTexture(::Effekseer::Backend::TextureRef& texture)
@@ -219,11 +217,6 @@ void Renderer::GetDepth(::Effekseer::Backend::TextureRef& texture, DepthReconstr
 void Renderer::SetDepth(::Effekseer::Backend::TextureRef texture, const DepthReconstructionParameter& reconstructionParam)
 {
 	impl->SetDepth(texture, reconstructionParam);
-}
-
-void Renderer::SetMaintainGammaColorInLinearColorSpace(bool value)
-{
-	impl->MaintainGammaColorInLinearColorSpace = value;
 }
 
 Effekseer::Backend::GraphicsDeviceRef Renderer::GetGraphicsDevice() const

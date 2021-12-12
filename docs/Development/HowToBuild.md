@@ -27,7 +27,7 @@ Requirements
 - git
 - git-lfs
 - g++
-- [.Net SDK](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu)
+- [dotnet-core](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu)
 
 - libx11-dev libgl1-mesa-dev libxrandr-dev libxi-dev x11proto-xf86vidmode-dev libx11-xcb-dev xorg-dev libglu1-mesa-dev libpulse-dev libgtk-3-dev libopenal-dev python3-distutils
 
@@ -44,6 +44,13 @@ cd Effekseer
 git submodule update --init
 git lfs install
 git lfs pull
+```
+
+### TortoiseGit (Windows)
+
+```
+Clone -> input https://github.com/effekseer/Effekseer
+Submodule Update -> check init
 ```
 
 Build to develop Editor
@@ -97,7 +104,7 @@ cd Dev/release
 mono Effekseer.exe
 ```
 
-### Linux
+###Linux
 
 ```
 python3 build.py

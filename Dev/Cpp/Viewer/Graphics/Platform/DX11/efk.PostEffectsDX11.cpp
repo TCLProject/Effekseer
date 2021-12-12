@@ -266,11 +266,9 @@ void BloomEffectDX11::Render(Effekseer::Backend::TextureRef src, Effekseer::Back
 	using namespace Effekseer;
 	using namespace EffekseerRendererDX11;
 
-	const auto size = std::array<int, 2>{src->GetParameter().Size[0], src->GetParameter().Size[1]};
-
-	if (renderTextureSize_ != size)
+	if (renderTextureSize_ != src->GetSize())
 	{
-		SetupBuffers(size);
+		SetupBuffers(src->GetSize());
 	}
 
 	// Extract pass

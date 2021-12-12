@@ -155,7 +155,9 @@ std::shared_ptr<StaticMeshRenderer> StaticMeshRenderer::Create(RefPtr<Backend::G
 		v = 255;
 	}
 
-	ret->dummyTexture_ = graphicsDevice->CreateTexture(texParam, initialTexData);
+	texParam.InitialData = std::move(initialTexData);
+
+	ret->dummyTexture_ = graphicsDevice->CreateTexture(texParam);
 
 	return ret;
 }

@@ -558,7 +558,7 @@ static ImTextureID ToImTextureID(ImageResource* image)
 	if (image != nullptr)
 	{
 		Effekseer::TextureRef texture = image->GetTexture();
-		if (texture != nullptr && texture->GetBackend() != nullptr)
+		if (texture != nullptr)
 		{
 #ifdef _WIN32
 			if (image->GetDeviceType() == DeviceType::DirectX11)
@@ -1121,45 +1121,6 @@ void GUIManager::PopStyleVar(int count)
 	ImGui::PopStyleVar(count);
 }
 
-float GUIManager::GetStyleVar(ImGuiStyleVarFlags idx)
-{
-	auto& style = ImGui::GetStyle();
-	switch (idx)
-	{
-	case Alpha:			    return style.Alpha;
-	case WindowRounding:	return style.WindowRounding;
-	case WindowBorderSize:  return style.WindowBorderSize;
-	case ChildRounding:	    return style.ChildRounding;
-	case ChildBorderSize:   return style.ChildBorderSize;
-	case PopupRounding:	    return style.PopupRounding;
-	case PopupBorderSize:   return style.PopupBorderSize;
-	case FrameRounding:	    return style.FrameRounding;
-	case FrameBorderSize:   return style.FrameBorderSize;
-	case IndentSpacing:	    return style.IndentSpacing;
-	case ScrollbarSize:	    return style.ScrollbarSize;
-	case ScrollbarRounding: return style.ScrollbarRounding;
-	case GrabMinSize:	    return style.GrabMinSize;
-	case GrabRounding:	    return style.GrabRounding;
-	default:                return 0.0f;
-	}
-}
-
-Vec2 GUIManager::GetStyleVar2(ImGuiStyleVarFlags idx)
-{
-	auto& style = ImGui::GetStyle();
-	switch (idx)
-	{
-	case WindowPadding:	    return *(Vec2*)&style.WindowPadding;
-	case WindowMinSize:	    return *(Vec2*)&style.WindowMinSize;
-	case WindowTitleAlign:  return *(Vec2*)&style.WindowTitleAlign;
-	case FramePadding:	    return *(Vec2*)&style.FramePadding;
-	case ItemSpacing:	    return *(Vec2*)&style.ItemSpacing;
-	case ItemInnerSpacing:  return *(Vec2*)&style.ItemInnerSpacing;
-	case ButtonTextAlign:   return *(Vec2*)&style.ButtonTextAlign;
-	default:                return Vec2();
-	}
-}
-
 void GUIManager::PushItemWidth(float item_width)
 {
 	ImGui::PushItemWidth(item_width);
@@ -1341,59 +1302,6 @@ float GUIManager::GetFrameHeightWithSpacing()
 float GUIManager::GetDpiScale() const
 {
 	return mainWindow_->GetDPIScale();
-}
-
-int GUIManager::GetItemID()
-{
-	return ImGui::GetItemID();
-}
-
-void GUIManager::SetFocusID(int id)
-{
-	ImGui::SetFocusID(id, ImGui::GetCurrentWindow());
-	//GImGui->NavDisableHighlight = false;
-}
-
-float GUIManager::GetScrollX()
-{
-	return ImGui::GetScrollX();
-}
-
-float GUIManager::GetScrollY()
-{
-	return ImGui::GetScrollY();
-}
-
-void GUIManager::SetScrollX(float scroll_x)
-{
-	ImGui::SetScrollX(scroll_x);
-}
-
-void GUIManager::SetScrollY(float scroll_y)
-{
-	ImGui::SetScrollY(scroll_y);
-}
-
-float GUIManager::GetScrollMaxX()
-{
-	return ImGui::GetScrollMaxX();
-}
-
-float GUIManager::GetScrollMaxY()
-{
-	return ImGui::GetScrollMaxY();
-}
-
-Vec2 GUIManager::ScrollToBringRectIntoView(Vec2 rect_min, Vec2 rect_max)
-{
-	auto window = ImGui::GetCurrentWindow();
-	auto rect = window->Rect();
-	rect.Max.x = rect.Min.x + rect_max.X;
-	rect.Max.y = rect.Min.y + rect_max.Y;
-	rect.Min.x += rect_min.X;
-	rect.Min.y += rect_min.Y;
-	ImVec2 deltaScroll = ImGui::ScrollToBringRectIntoView(window, rect);
-	return { deltaScroll.x, deltaScroll.y };
 }
 
 void GUIManager::Columns(int count, const char* id, bool border)
@@ -1895,30 +1803,6 @@ bool GUIManager::Selectable(const char16_t* label, bool selected, SelectableFlag
 	return ImGui::Selectable(utf8str<256>(label), selected, (int)flags, ImVec2(0, 0));
 }
 
-bool GUIManager::SelectableContent(const char16_t* idstr, const char16_t* label, bool selected, ImageResource* thumbnail, float size_x, float size_y, SelectableFlags flags)
-{
-	ImVec2 cursorPos = ImGui::GetCursorScreenPos();
-	ImDrawList* drawList = ImGui::GetWindowDrawList();
-	const auto& style = ImGui::GetStyle();
-
-	ImVec2 screenPos = ImGui::GetCursorScreenPos();
-	ImVec4 clipRect = { screenPos.x, screenPos.y, screenPos.x + size_x, screenPos.y + size_y };
-
-	if (thumbnail)
-	{
-		drawList->AddImage(ToImTextureID(thumbnail), cursorPos, ImVec2(cursorPos.x + size_x, cursorPos.y + size_y));
-	}
-
-	bool result = ImGui::Selectable(utf8str<256>(idstr), selected, (int)flags, ImVec2(size_x, size_y));
-
-	drawList->AddText(GImGui->Font, GImGui->FontSize, ImVec2(cursorPos.x + 1, cursorPos.y + 1), 
-		ImGui::GetColorU32(ImGuiCol_WindowBg, 0.8f), utf8str<256>(label), nullptr, size_x, &clipRect);
-	drawList->AddText(GImGui->Font, GImGui->FontSize, cursorPos, 
-		ImGui::GetColorU32(ImGuiCol_Text), utf8str<256>(label), nullptr, size_x, &clipRect);
-
-	return result;
-}
-
 void GUIManager::SetTooltip(const char16_t* text)
 {
 	auto func = [](const char* c) -> void { ImGui::SetTooltip(c); };
@@ -2137,28 +2021,6 @@ bool GUIManager::IsCtrlKeyDown()
 bool GUIManager::IsAltKeyDown()
 {
 	return ImGui::GetIO().KeyAlt;
-}
-
-int GUIManager::GetPressedKeyIndex(bool repeat)
-{
-	for (int i = 0; i < 512; i++)
-	{
-		if (ImGui::IsKeyPressed(i, repeat))
-		{
-			return i;
-		}
-	}
-	return -1;
-}
-
-const char16_t* GUIManager::GetInputCharacters()
-{
-	inputTextResult.clear();
-	for (auto c : ImGui::GetIO().InputQueueCharacters)
-	{
-		inputTextResult.push_back(c);
-	}
-	return inputTextResult.c_str();
 }
 
 bool GUIManager::IsMouseDown(int button)

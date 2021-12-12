@@ -21,12 +21,7 @@ namespace Effekseer.Binary
 		Ver16Alpha8 = 1607,
 		Ver16Alpha9 = 1608,
 		Ver1600 = 1610,
-		Ver17Alpha1 = 1700,
-#if __EFFEKSEER_BUILD_VERSION17__
-		Latest = Ver17Alpha1,
-#else
 		Latest = Ver1600,
-#endif
 	}
 
 	public class Exporter
@@ -46,11 +41,6 @@ namespace Effekseer.Binary
 		public HashSet<string> Curves = new HashSet<string>();
 
 		public List<ProceduralModelParameter> ProceduralModels = new List<ProceduralModelParameter>();
-
-		/// <summary>
-		/// Convert an absolute path to load dependencies from redirected files
-		/// </summary>
-		public Func<string, string> ConvertLoadingFilePath;
 
 		/// <summary>
 		/// Export effect data
@@ -984,17 +974,17 @@ namespace Effekseer.Binary
 
 #if DEBUG
 				{
-					//var old = RendererCommonValues_Old.GetBytes(n.RendererCommonValues, n.AdvancedRendererCommonValuesValues, texture_and_index, normalTexture_and_index, distortionTexture_and_index, material_and_index, exporterVersion);
-					var @new = RendererCommonValues.GetBytes(n.RendererCommonValues, n.AdvancedRendererCommonValuesValues, texture_and_index, normalTexture_and_index, distortionTexture_and_index, material_and_index, exporterVersion, ConvertLoadingFilePath);
-					//if (!old.SequenceEqual(@new))
-					//{
-					//	throw new Exception("RendererCommonValues.GetBytes returned unexpected data.");
-					//}
+					var old = RendererCommonValues_Old.GetBytes(n.RendererCommonValues, n.AdvancedRendererCommonValuesValues, texture_and_index, normalTexture_and_index, distortionTexture_and_index, material_and_index, exporterVersion);
+					var @new = RendererCommonValues.GetBytes(n.RendererCommonValues, n.AdvancedRendererCommonValuesValues, texture_and_index, normalTexture_and_index, distortionTexture_and_index, material_and_index, exporterVersion);
+					if (!old.SequenceEqual(@new))
+					{
+						throw new Exception("RendererCommonValues.GetBytes returned unexpected data.");
+					}
 
 					node_data.Add(@new);
 				}
 #else
-				node_data.Add(RendererCommonValues.GetBytes(n.RendererCommonValues, n.AdvancedRendererCommonValuesValues, texture_and_index, normalTexture_and_index, distortionTexture_and_index, material_and_index, exporterVersion, ConvertLoadingFilePath));
+				node_data.Add(RendererCommonValues.GetBytes(n.RendererCommonValues, n.AdvancedRendererCommonValuesValues, texture_and_index, normalTexture_and_index, distortionTexture_and_index, material_and_index, exporterVersion));
 #endif
 
 				if (isRenderParamExported)

@@ -396,8 +396,6 @@ public:
 
 	void SetAutoDrawing(Handle handle, bool autoDraw) override;
 
-	void* GetUserData(Handle handle) override;
-
 	void SetUserData(Handle handle, void* userData) override;
 
 	void Flip() override;

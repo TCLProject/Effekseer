@@ -1,10 +1,8 @@
-cmake_minimum_required(VERSION 3.15)
-
-if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum OS X deployment version" FORCE)
-endif()
-
+# The project's name
 project(Effekseer C CXX)
+
+# Check cmake version
+cmake_minimum_required(VERSION 3.15)
 
 # C++ version
 if(APPLE)
@@ -13,11 +11,10 @@ else()
     set(CMAKE_CXX_STANDARD 17)
 endif()
 
-function(WarnError target)
-    if(MSVC)
-        target_compile_options(${target} PRIVATE /we4267 /we4456 /we4458 /we4715)
-    endif()
-endfunction()
+# For Mac
+if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13)
+endif()
 
 if (MSVC)
     if(USE_MSVC_RUNTIME_LIBRARY_DLL)
