@@ -417,7 +417,7 @@ bool Initialize(OpenGLDeviceType deviceType, bool isExtensionsEnabled)
 
 bool IsSupportedVertexArray()
 {
-	return g_isSupportedVertexArray;
+	return false;
 }
 
 bool IsSupportedBufferRange()
