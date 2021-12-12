@@ -42,6 +42,7 @@
 #include "ShaderHeader/sprite_unlit_vs.h"
 
 #include "GraphicsDevice.h"
+#include <cstdio>
 
 #ifdef __APPLE__
 #import <TargetConditionals.h>
@@ -939,6 +940,7 @@ void RendererImplemented::SetLayout(Shader* shader)
 void RendererImplemented::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
 {
 	GLCheckError();
+	printf("I am printing stuff to see if it's being printed, please tell me 43552345525353425435432634345235234");
 
 	impl->drawcallCount++;
 	impl->drawvertexCount += spriteCount * 4;
