@@ -941,7 +941,8 @@ void RendererImplemented::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
 {
 	GLCheckError();
 	
-	printf(glIsVertexArray(66));
+	bool isvertex = glIsVertexArray(66);
+	printf("%s", x ? "true\n" : "false\n");
 
 	impl->drawcallCount++;
 	impl->drawvertexCount += spriteCount * 4;
