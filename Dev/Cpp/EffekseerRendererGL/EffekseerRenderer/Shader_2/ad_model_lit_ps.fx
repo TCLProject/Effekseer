@@ -197,7 +197,7 @@ vec4 _main(PS_Input Input)
     Output = vec4(_470.x, _470.y, _470.z, Output.w);
     if (Output.w <= max(0.0, advancedParam.AlphaThreshold))
     {
-        discard;
+        
     }
     vec3 _502 = mix(CBPS0.fEdgeColor.xyz * CBPS0.fEdgeParameter.y, Output.xyz, vec3(ceil((Output.w - advancedParam.AlphaThreshold) - CBPS0.fEdgeParameter.x)));
     Output = vec4(_502.x, _502.y, _502.z, Output.w);

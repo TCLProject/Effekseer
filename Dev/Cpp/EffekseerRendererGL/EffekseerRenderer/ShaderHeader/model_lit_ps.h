@@ -58,10 +58,6 @@ vec4 _main(PS_Input Input)
     Output = vec4(_99.x, _99.y, _99.z, Output.w);
     vec3 _110 = Output.xyz * CBPS0.fEmissiveScaling.x;
     Output = vec4(_110.x, _110.y, _110.z, Output.w);
-    if (Output.w == 0.0)
-    {
-        discard;
-    }
     return Output;
 }
 
@@ -173,10 +169,6 @@ vec4 _main(PS_Input Input)
         vec4 param_4 = CBPS0.reconstructionParam2;
         Output.w *= SoftParticle(param, param_1, param_2, param_3, param_4);
     }
-    if (Output.w == 0.0)
-    {
-        discard;
-    }
     return Output;
 }
 
@@ -256,10 +248,6 @@ highp vec4 _main(PS_Input Input)
     Output = vec4(_99.x, _99.y, _99.z, Output.w);
     highp vec3 _110 = Output.xyz * CBPS0.fEmissiveScaling.x;
     Output = vec4(_110.x, _110.y, _110.z, Output.w);
-    if (Output.w == 0.0)
-    {
-        discard;
-    }
     return Output;
 }
 
@@ -369,10 +357,6 @@ highp vec4 _main(PS_Input Input)
         highp vec4 param_3 = CBPS0.reconstructionParam1;
         highp vec4 param_4 = CBPS0.reconstructionParam2;
         Output.w *= SoftParticle(param, param_1, param_2, param_3, param_4);
-    }
-    if (Output.w == 0.0)
-    {
-        discard;
     }
     return Output;
 }

@@ -46,7 +46,7 @@ highp vec4 _main(PS_Input Input)
     Output = vec4(_45.x, _45.y, _45.z, Output.w);
     if (Output.w == 0.0)
     {
-        discard;
+        
     }
     return Output;
 }

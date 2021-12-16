@@ -79,7 +79,7 @@ highp vec4 _main(PS_Input Input)
     }
     if (Output.w == 0.0)
     {
-        discard;
+        
     }
     return Output;
 }

@@ -53,7 +53,7 @@ highp vec4 _main(PS_Input Input)
     Output = vec4(color.x, color.y, color.z, Output.w);
     if (Output.w == 0.0)
     {
-        discard;
+        
     }
     return Output;
 }
