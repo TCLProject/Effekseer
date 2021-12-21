@@ -155,7 +155,7 @@ vec4 _main(PS_Input Input)
     Output = param_7;
     if (Output.w <= max(0.0, advancedParam.AlphaThreshold))
     {
-        
+        discard;
     }
     vec2 pos = Input.PosP.xy / vec2(Input.PosP.w);
     vec2 posR = Input.ProjTangent.xy / vec2(Input.ProjTangent.w);
@@ -364,7 +364,7 @@ vec4 _main(PS_Input Input)
     Output = param_7;
     if (Output.w <= max(0.0, advancedParam.AlphaThreshold))
     {
-        
+        discard;
     }
     vec2 pos = Input.PosP.xy / vec2(Input.PosP.w);
     vec2 posR = Input.ProjTangent.xy / vec2(Input.ProjTangent.w);
@@ -570,7 +570,7 @@ highp vec4 _main(PS_Input Input)
     Output = param_7;
     if (Output.w <= max(0.0, advancedParam.AlphaThreshold))
     {
-        
+        discard;
     }
     highp vec2 pos = Input.PosP.xy / vec2(Input.PosP.w);
     highp vec2 posR = Input.ProjTangent.xy / vec2(Input.ProjTangent.w);
@@ -778,7 +778,7 @@ highp vec4 _main(PS_Input Input)
     Output = param_7;
     if (Output.w <= max(0.0, advancedParam.AlphaThreshold))
     {
-        
+        discard;
     }
     highp vec2 pos = Input.PosP.xy / vec2(Input.PosP.w);
     highp vec2 posR = Input.ProjTangent.xy / vec2(Input.ProjTangent.w);

@@ -59,7 +59,7 @@ vec4 _main(PS_Input Input)
     Output = vec4(_110.x, _110.y, _110.z, Output.w);
     if (Output.w == 0.0)
     {
-        
+        discard;
     }
     return Output;
 }

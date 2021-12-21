@@ -221,7 +221,7 @@ highp vec4 _main(PS_Input Input)
     }
     if (Output.w <= max(0.0, advancedParam.AlphaThreshold))
     {
-        
+        discard;
     }
     highp vec3 _584 = mix(CBPS0.fEdgeColor.xyz * CBPS0.fEdgeParameter.y, Output.xyz, vec3(ceil((Output.w - advancedParam.AlphaThreshold) - CBPS0.fEdgeParameter.x)));
     Output = vec4(_584.x, _584.y, _584.z, Output.w);

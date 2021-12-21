@@ -53,6 +53,10 @@ vec4 _main(PS_Input Input)
     uv.y = 1.0 - uv.y;
     vec3 color = vec3(texture2D(Sampler_sampler_backTex, uv).xyz);
     Output = vec4(color.x, color.y, color.z, Output.w);
+    if (Output.w == 0.0)
+    {
+        discard;
+    }
     return Output;
 }
 
@@ -157,6 +161,10 @@ vec4 _main(PS_Input Input)
         vec4 param_4 = CBPS0.reconstructionParam2;
         Output.w *= SoftParticle(param, param_1, param_2, param_3, param_4);
     }
+    if (Output.w == 0.0)
+    {
+        discard;
+    }
     return Output;
 }
 
@@ -230,6 +238,10 @@ highp vec4 _main(PS_Input Input)
     uv.y = 1.0 - uv.y;
     highp vec3 color = vec3(texture2D(Sampler_sampler_backTex, uv).xyz);
     Output = vec4(color.x, color.y, color.z, Output.w);
+    if (Output.w == 0.0)
+    {
+        discard;
+    }
     return Output;
 }
 
@@ -332,6 +344,10 @@ highp vec4 _main(PS_Input Input)
         highp vec4 param_3 = CBPS0.reconstructionParam1;
         highp vec4 param_4 = CBPS0.reconstructionParam2;
         Output.w *= SoftParticle(param, param_1, param_2, param_3, param_4);
+    }
+    if (Output.w == 0.0)
+    {
+        discard;
     }
     return Output;
 }

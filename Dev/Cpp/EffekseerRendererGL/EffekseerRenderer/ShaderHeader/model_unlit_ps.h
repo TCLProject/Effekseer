@@ -46,6 +46,10 @@ vec4 _main(PS_Input Input)
     vec4 Output = texture2D(Sampler_sampler_colorTex, Input.UV) * Input.Color;
     vec3 _45 = Output.xyz * CBPS0.fEmissiveScaling.x;
     Output = vec4(_45.x, _45.y, _45.z, Output.w);
+    if (Output.w == 0.0)
+    {
+        discard;
+    }
     return Output;
 }
 
@@ -142,6 +146,10 @@ vec4 _main(PS_Input Input)
         vec4 param_4 = CBPS0.reconstructionParam2;
         Output.w *= SoftParticle(param, param_1, param_2, param_3, param_4);
     }
+    if (Output.w == 0.0)
+    {
+        discard;
+    }
     return Output;
 }
 
@@ -206,6 +214,10 @@ highp vec4 _main(PS_Input Input)
     highp vec4 Output = texture2D(Sampler_sampler_colorTex, Input.UV) * Input.Color;
     highp vec3 _45 = Output.xyz * CBPS0.fEmissiveScaling.x;
     Output = vec4(_45.x, _45.y, _45.z, Output.w);
+    if (Output.w == 0.0)
+    {
+        discard;
+    }
     return Output;
 }
 
@@ -300,6 +312,10 @@ highp vec4 _main(PS_Input Input)
         highp vec4 param_3 = CBPS0.reconstructionParam1;
         highp vec4 param_4 = CBPS0.reconstructionParam2;
         Output.w *= SoftParticle(param, param_1, param_2, param_3, param_4);
+    }
+    if (Output.w == 0.0)
+    {
+        discard;
     }
     return Output;
 }
